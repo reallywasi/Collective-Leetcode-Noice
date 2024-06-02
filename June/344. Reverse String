@@ -29,3 +29,33 @@ public:
         }
     }
 };
+
+
+__________________________________________________________________________________________________________
+
+
+RECURSION
+
+
+
+class Solution {
+public:
+
+void reverseStringRecursive(std::vector<char>& s, int left, int right) {
+    // Base case: If left is no longer less than right, we are done
+    if (left >= right) {
+        return;
+    }
+    
+    // Swap the characters at positions left and right
+  swap(s[left], s[right]);
+    
+    // Recur for the rest of the string
+    reverseStringRecursive(s, left + 1, right - 1);
+}
+
+    void reverseString(vector<char>& s) {
+            reverseStringRecursive(s, 0, s.size() - 1);
+
+    }
+};
