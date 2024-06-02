@@ -1,4 +1,115 @@
+Step	Function Call	root Value	left	right	result	Return Value
+1	solve(root = 1, result = INT_MIN)	1				
+2	solve(root = 2, result = INT_MIN)	2				
+3	solve(root = 4, result = INT_MIN)	4				
+4	solve(root = NULL, result = INT_MIN)	NULL				0
+5	solve(root = NULL, result = INT_MIN)	NULL				0
+6	Back to solve(root = 4, result = INT_MIN)	4	0	0	0	1
+7	Back to solve(root = 2, result = 0)	2	1			
+8	solve(root = 5, result = 0)	5				
+9	solve(root = NULL, result = 0)	NULL				0
+10	solve(root = NULL, result = 0)	NULL				0
+11	Back to solve(root = 5, result = 0)	5	0	0	0	1
+12	Back to solve(root = 2, result = 0)	2	1	1	2	2
+13	Back to solve(root = 1, result = 2)	1	2			
+14	solve(root = 3, result = 2)	3				
+15	solve(root = NULL, result = 2)	NULL				0
+16	solve(root = NULL, result = 2)	NULL				0
+17	Back to solve(root = 3, result = 2)	3	0	0	2	1
+18	Back to solve(root = 1, result = 2)	1	2	1	3	3
+________________________________________________________________________________________________________
+Test Case: root = [1, 2, 3, 4, 5]
+This binary tree can be visualized as:
 
+markdown
+Copy code
+        1
+       / \
+      2   3
+     / \
+    4   5
+Construction of Tree
+Node 1 is the root node.
+Node 2 is the left child of Node 1.
+Node 3 is the right child of Node 1.
+Node 4 is the left child of Node 2.
+Node 5 is the right child of Node 2.
+Initial Variables
+root points to the node with value 1.
+result is initialized to INT_MIN.
+Dry Run
+Call solve(root = 1, result = INT_MIN)
+
+root is not NULL.
+Call solve(root->left = 2, result = INT_MIN)
+Call solve(root = 2, result = INT_MIN)
+
+root is not NULL.
+Call solve(root->left = 4, result = INT_MIN)
+Call solve(root = 4, result = INT_MIN)
+
+root is not NULL.
+Call solve(root->left = NULL, result = INT_MIN)
+root is NULL, return 0.
+Call solve(root->right = NULL, result = INT_MIN)
+root is NULL, return 0.
+left = 0, right = 0
+result = max(INT_MIN, 0 + 0) = 0
+Return max(0, 0) + 1 = 1
+Back to solve(root = 2, result = 0)
+
+left = 1 (from Node 4)
+Call solve(root->right = 5, result = 0)
+Call solve(root = 5, result = 0)
+
+root is not NULL.
+Call solve(root->left = NULL, result = 0)
+root is NULL, return 0.
+Call solve(root->right = NULL, result = 0)
+root is NULL, return 0.
+left = 0, right = 0
+result = max(0, 0 + 0) = 0
+Return max(0, 0) + 1 = 1
+Back to solve(root = 2, result = 0)
+
+right = 1 (from Node 5)
+result = max(0, 1 + 1) = 2
+Return max(1, 1) + 1 = 2
+Back to solve(root = 1, result = 2)
+
+left = 2 (from Node 2)
+Call solve(root->right = 3, result = 2)
+Call solve(root = 3, result = 2)
+
+root is not NULL.
+Call solve(root->left = NULL, result = 2)
+root is NULL, return 0.
+Call solve(root->right = NULL, result = 2)
+root is NULL, return 0.
+left = 0, right = 0
+result = max(2, 0 + 0) = 2
+Return max(0, 0) + 1 = 1
+Back to solve(root = 1, result = 2)
+
+right = 1 (from Node 3)
+result = max(2, 2 + 1) = 3
+Return max(2, 1) + 1 = 3
+Final Result
+The final value of result is 3, which is the diameter of the binary tree.
+Explanation
+The diameter of the binary tree is the longest path between any two nodes. In this case, the longest path is between Node 4 and Node 3, which goes through Node 2 and Node 1, resulting in a path length of 3 (4 -> 2 -> 1 -> 3).
+
+Output
+The function returns result which is 3.
+
+
+
+
+
+
+
+
+_________________________________________________________________________________________________________________
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
