@@ -1,0 +1,87 @@
+
+class Solution {
+public:
+
+void leftsubtree(Node* root,vector<int>&res)
+{
+    if(root==NULL)return;
+    
+    if(root->left==NULL && root->right==NULL)return;
+    
+    res.push_back(root->data);
+     if(root->left!=NULL)
+    {
+        leftsubtree(root->left,res);
+    }
+    
+    else if(root->right!=NULL)
+    {
+        leftsubtree(root->right,res);
+    }
+ 
+    
+    
+}
+void leaves(Node* root,vector<int>&res)
+{
+        if(root==NULL)return;
+        
+            if(root->left==NULL && root->right==NULL)
+            {
+                    res.push_back(root->data);
+                    return;
+
+            }
+            leaves(root->left,res);
+            leaves(root->right,res);
+            
+
+
+}
+
+
+
+
+
+void rightsubtree(Node* root,vector<int>&res)
+{
+        if(root==NULL)return;
+
+    if(root->left==NULL && root->right==NULL)return;
+    
+    
+    
+if(root->right!=NULL)
+    {
+        rightsubtree(root->right,res);
+    }
+    else if(root->left!=NULL)
+    {
+        rightsubtree(root->left,res);
+    }
+        res.push_back(root->data);
+
+
+}
+
+
+
+
+
+    vector <int> boundary(Node *root)
+    {
+        vector<int>res;
+        if(root==NULL)
+        {
+            return res;
+        }
+  if (!(root->left == NULL && root->right == NULL)) {
+            res.push_back(root->data);
+        }
+leftsubtree(root->left,res);
+leaves(root,res);
+rightsubtree(root->right,res);
+
+return res;
+    }
+};
