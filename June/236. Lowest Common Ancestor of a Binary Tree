@@ -1,0 +1,63 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    // Helper function to find the path from root to a given node value.
+    bool getPath(TreeNode* root, vector<int>& path, int v) {
+        if (root == nullptr) {
+            return false;
+        }
+        path.push_back(root->val);
+        if (root->val == v) {
+            return true;
+        }
+        if (getPath(root->left, path, v) || getPath(root->right, path, v)) {
+            return true;
+        }
+        path.pop_back();
+        return false;
+    }
+
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        vector<int> p1, p2;
+        if (root == nullptr) {
+            return nullptr;
+        }
+
+        // Get paths from root to p and root to q.
+        getPath(root, p1, p->val);
+        getPath(root, p2, q->val);
+
+        // Compare the paths to find the first different value.
+        int i = 0;
+        while (i < p1.size() && i < p2.size() && p1[i] == p2[i]) {
+            i++;
+        }
+
+        // The LCA is the last common node before the paths diverged.
+        int lca_val = p1[i - 1];
+        
+        // Find the node in the tree that corresponds to lca_val.
+        return findNode(root, lca_val);
+    }
+
+private:
+    // Helper function to find a node with a given value in the tree.
+    TreeNode* findNode(TreeNode* root, int val) {
+        if (root == nullptr || root->val == val) {
+            return root;
+        }
+        TreeNode* left = findNode(root->left, val);
+        if (left != nullptr) {
+            return left;
+        }
+        return findNode(root->right, val);
+    }
+};
