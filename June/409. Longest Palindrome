@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int longestPalindrome(string s) {
+        map<char,int>m;
+        for(char ch:s)
+        {
+            m[ch]++;
+        }
+        int count =0;
+        bool isodd=false;
+
+        for(auto itr:m){
+            if(itr.second%2==0)
+            {
+                count =count+itr.second;
+            }
+            else{
+                count=count+itr.second-1;
+                isodd=true;
+            }
+
+        }
+        if(isodd)
+        {
+            return count+1;
+        }
+        return count;
+    }
+};
