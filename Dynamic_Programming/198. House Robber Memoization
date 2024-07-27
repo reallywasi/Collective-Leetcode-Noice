@@ -1,0 +1,22 @@
+
+class Solution {
+public:
+    int sumx(vector<int>& dp, int index, vector<int>& nums) {
+        if (index == 0) return nums[index];
+        if (index < 0) return 0;
+
+        if (dp[index] != -1) return dp[index];
+
+        int pick = nums[index] + sumx(dp, index - 2, nums);
+        int notpick = sumx(dp, index - 1, nums);
+
+        dp[index] = max(pick, notpick);
+        return dp[index];
+    }
+
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> dp(n, -1);
+        return sumx(dp, n - 1, nums);
+    }
+};
