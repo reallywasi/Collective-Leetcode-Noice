@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int robMemo(vector<int>& nums, vector<int>& memo, int index) {
+        if (index < 0) return 0;
+        if (memo[index] != -1) return memo[index];
+
+        int pick = nums[index] + (index > 1 ? robMemo(nums, memo, index - 2) : 0);
+        int notpick = robMemo(nums, memo, index - 1);
+
+        memo[index] = max(pick, notpick);
+        return memo[index];
+    }
+    
+    int robLinear(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> memo(n, -1);
+        return robMemo(nums, memo, n - 1);
+    }
+    
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        if (n == 1) return nums[0];
+
+        // Exclude the first element
+        vector<int> nums1(nums.begin() + 1, nums.end());
+        // Exclude the last element
+        vector<int> nums2(nums.begin(), nums.end() - 1);
+        
+        return max(robLinear(nums1), robLinear(nums2));
+    }
+};
