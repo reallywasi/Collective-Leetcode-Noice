@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int robLinear(vector<int>& nums) {
+        int prev2 = 0;
+        int prev = nums[0];
+        
+        for (int i = 1; i < nums.size(); ++i) {
+            int pick = nums[i] + (i > 1 ? prev2 : 0);
+            int notpick = prev;
+            int curr = max(pick, notpick);
+            prev2 = prev;
+            prev = curr;
+        }
+        
+        return prev;
+    }
+    
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        if (n == 1) return nums[0];
+        
+        // Exclude the first element
+        vector<int> nums1(nums.begin() + 1, nums.end());
+        // Exclude the last element
+        vector<int> nums2(nums.begin(), nums.end() - 1);
+        
+        return max(robLinear(nums1), robLinear(nums2));
+    }
+};
