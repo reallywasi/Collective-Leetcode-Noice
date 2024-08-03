@@ -1,0 +1,21 @@
+class Solution {
+public:
+bool canBeEqual(vector<int>& target, vector<int>& arr) {
+    // Check if lengths are different
+    if (target.size() != arr.size()) return false;
+
+    // Create frequency maps for both arrays
+    unordered_map<int, int> targetMap, arrMap;
+
+    for (int num : target) {
+        targetMap[num]++;
+    }
+
+    for (int num : arr) {
+        arrMap[num]++;
+    }
+
+    // Compare the frequency maps
+    return targetMap == arrMap;
+}
+};
