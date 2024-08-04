@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int rangeSum(vector<int>& nums, int n, int left, int right) {
+        vector<int>x;
+        const int MOD=1000000007;
+        int sum=0;
+
+        for(int i=0;i<n;i++)
+        { 
+            sum=0;
+            for(int j=i;j<n;j++)
+            {
+                sum=sum+nums[j];
+                x.push_back(sum);
+            }         
+        }
+        sum=0;
+        sort(x.begin(),x.end());
+
+        for(int i=left-1;i<=right-1;i++)
+        {
+sum=(sum+x[i])%MOD;
+        }
+        return sum;
+    }
+};
