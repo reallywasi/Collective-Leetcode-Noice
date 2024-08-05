@@ -1,0 +1,72 @@
+class Solution {
+public:
+    int f(vector<vector<int>>& arr, int day, int last) {
+        if (day == 0) {
+            int maxi = 0;
+            for (int task = 0; task < 3; task++) {
+                if (task != last) {
+                    maxi = max(maxi, arr[day][task]);
+                }
+            }
+            return maxi;
+        }
+
+        int maxi = 0;
+        for (int task = 0; task < 3; task++) {
+            if (task != last) {
+                int points = arr[day][task] + f(arr, day - 1, task);
+                maxi = max(maxi, points);
+            }
+        }
+        return maxi;
+    }
+
+    int maximumPoints(vector<vector<int>>& arr, int n) {
+        // Start with day n-1 and with no last task (indicated by 3)
+        return f(arr, n - 1, 3);
+    }
+};
+
+
+
+
+
+
+_________________________________________________________________________________________________
+
+
+The logic behind the code is to find the maximum points Geek can earn by choosing different activities each day, with the constraint that the same activity cannot be chosen on consecutive days. The solution uses a recursive approach to explore all possible ways to select activities and calculates the total points for each combination. Here's a step-by-step breakdown:
+
+### Step-by-Step Explanation
+
+1. **Initial Setup**:
+   - The function `maximumPoints` initializes the process by calling the recursive function `f` with the last day (`n - 1`) and an initial `last` value of `3`, indicating that no activity has been performed on the "previous" day.
+
+2. **Base Case (`day == 0`)**:
+   - When `day` is `0` (i.e., the first day), we can't consider any previous activity. Therefore, we look at all possible activities (Running, Fighting, Learning Practice) and select the one with the maximum points, except for the one indicated by `last` (which is not applicable on the first day as `last` is initially set to `3`).
+   - We iterate through all three activities, comparing the points and choosing the maximum points possible. This value is then returned.
+
+3. **Recursive Case**:
+   - For each day from `n-1` to `1`, we consider each activity (`task`) that can be performed that day.
+   - We skip the activity if it was the same as the activity performed on the previous day (`task != last`).
+   - For each valid activity (`task != last`), we calculate the total points by adding the points for the current activity (`arr[day][task]`) to the result of the recursive call `f(arr, day - 1, task)`. The recursive call calculates the maximum points for the remaining days, considering the current activity as the last performed activity.
+   - We keep track of the maximum points obtained among all valid activities for that day.
+
+4. **Maximization**:
+   - For each recursive call, we compute the maximum possible points for the given day and the last activity. The result is passed back up the call stack.
+
+5. **Result**:
+   - The final result is the maximum points obtained for the entire period, starting from the last day and considering all possible initial activities.
+
+### Why the `last` Parameter?
+
+The `last` parameter is crucial because it ensures that the same activity is not chosen on consecutive days. This restriction is enforced by skipping any activity that matches the `last` activity during the recursive exploration.
+
+### Summary
+
+- The code explores all possible ways to select activities over the days, ensuring that no two consecutive days have the same activity.
+- It uses a recursive function to compute the maximum points by adding the points of the current day's activity to the maximum points obtainable from the previous days, considering different combinations.
+- The goal is to maximize the total points under the given constraints. The recursive solution, while simple and illustrative, is not the most efficient due to its exponential time complexity. However, it clearly demonstrates the problem-solving approach.
+
+
+
