@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int maximumPoints(vector<vector<int>>& arr, int n) {
+        // dp[i][j] represents the maximum points up to day i with activity j
+        vector<vector<int>> dp(n, vector<int>(3, 0));
+
+        // Base case: for the first day, dp[0][j] is just arr[0][j]
+        dp[0][0] = arr[0][0];
+        dp[0][1] = arr[0][1];
+        dp[0][2] = arr[0][2];
+
+        // Fill the dp table
+        for (int day = 1; day < n; ++day) {
+            for (int task = 0; task < 3; ++task) {
+                dp[day][task] = arr[day][task] + max(
+                    dp[day - 1][(task + 1) % 3], // max points if the previous day was (task+1)%3
+                    dp[day - 1][(task + 2) % 3]  // max points if the previous day was (task+2)%3
+                );
+            }
+        }
+
+        // The answer is the maximum points on the last day
+        return max(dp[n - 1][0], max(dp[n - 1][1], dp[n - 1][2]));
+    }
+};
