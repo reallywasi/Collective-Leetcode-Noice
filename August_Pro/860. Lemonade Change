@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool lemonadeChange(vector<int>& bills) {
+        int fivecnt = 0;
+        int tencnt = 0;
+
+        for(int i = 0; i < bills.size(); i++) {
+            if(bills[i] == 5) {
+                fivecnt++;
+            } else if(bills[i] == 10) {
+                if(fivecnt == 0) return false; // No $5 bill to give as change
+                fivecnt--;
+                tencnt++;
+            } else { // bills[i] == 20
+                // Prefer to give one $10 and one $5 as change
+                if(tencnt > 0 && fivecnt > 0) {
+                    tencnt--;
+                    fivecnt--;
+                } 
+                // Otherwise, give three $5 bills as change
+                else if(fivecnt >= 3) {
+                    fivecnt -= 3;
+                } 
+                // No valid change available
+                else {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+};
