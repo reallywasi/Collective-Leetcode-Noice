@@ -1,0 +1,162 @@
+#include <vector>
+#include <algorithm>
+
+class Solution {
+public:
+    int minimumTotal(std::vector<std::vector<int>>& triangle) {
+        int n = triangle.size();
+        
+        // Create a dp table with dimensions n x n
+        std::vector<std::vector<int>> dp(n, std::vector<int>(n, 0));
+        
+        // Initialize the last row of dp table with values from the triangle
+        for (int j = 0; j < n; ++j) {
+            dp[n-1][j] = triangle[n-1][j];
+        }
+        
+        // Fill the dp table from bottom to top
+        for (int i = n - 2; i >= 0; --i) {
+            for (int j = 0; j <= i; ++j) {
+                // Calculate minimum path sum for cell (i, j)
+                dp[i][j] = triangle[i][j] + std::min(dp[i+1][j], dp[i+1][j+1]);
+            }
+        }
+        
+        // The top element contains the minimum path sum
+        return dp[0][0];
+    }
+};
+
+
+
+
+//_________________________________________________________________________________________________
+Sure, let's dry run the tabulation approach for the given problem. We will use a simple example to illustrate the process clearly.
+
+### Example Triangle
+
+Consider the following triangle:
+```
+   2
+  3 4
+ 6 5 7
+4 1 8 3
+```
+
+### Steps for Tabulation Approach
+
+1. **Initialization:**
+
+   - Create a `dp` table with the same dimensions as the triangle and initialize it with zeros.
+
+   ```
+   dp = [
+     [0, 0, 0, 0],
+     [0, 0, 0, 0],
+     [0, 0, 0],
+     [0, 0, 0, 0]
+   ]
+   ```
+
+   - Copy the last row of the triangle into the last row of `dp`.
+
+   ```
+   dp = [
+     [0, 0, 0, 0],
+     [0, 0, 0, 0],
+     [0, 0, 0],
+     [4, 1, 8, 3]
+   ]
+   ```
+
+2. **Fill the DP Table:**
+
+   **For `i = 2`:**
+   - For `j = 0`:
+     - `dp[2][0] = triangle[2][0] + min(dp[3][0], dp[3][1])`
+     - `dp[2][0] = 6 + min(4, 1)`
+     - `dp[2][0] = 6 + 1 = 7`
+   - For `j = 1`:
+     - `dp[2][1] = triangle[2][1] + min(dp[3][1], dp[3][2])`
+     - `dp[2][1] = 5 + min(1, 8)`
+     - `dp[2][1] = 5 + 1 = 6`
+   - For `j = 2`:
+     - `dp[2][2] = triangle[2][2] + min(dp[3][2], dp[3][3])`
+     - `dp[2][2] = 7 + min(8, 3)`
+     - `dp[2][2] = 7 + 3 = 10`
+
+   Updated `dp` table:
+
+   ```
+   dp = [
+     [0, 0, 0, 0],
+     [0, 0, 0, 0],
+     [7, 6, 10],
+     [4, 1, 8, 3]
+   ]
+   ```
+
+   **For `i = 1`:**
+   - For `j = 0`:
+     - `dp[1][0] = triangle[1][0] + min(dp[2][0], dp[2][1])`
+     - `dp[1][0] = 3 + min(7, 6)`
+     - `dp[1][0] = 3 + 6 = 9`
+   - For `j = 1`:
+     - `dp[1][1] = triangle[1][1] + min(dp[2][1], dp[2][2])`
+     - `dp[1][1] = 4 + min(6, 10)`
+     - `dp[1][1] = 4 + 6 = 10`
+
+   Updated `dp` table:
+
+   ```
+   dp = [
+     [0, 0, 0, 0],
+     [9, 10, 0, 0],
+     [7, 6, 10],
+     [4, 1, 8, 3]
+   ]
+   ```
+
+   **For `i = 0`:**
+   - For `j = 0`:
+     - `dp[0][0] = triangle[0][0] + min(dp[1][0], dp[1][1])`
+     - `dp[0][0] = 2 + min(9, 10)`
+     - `dp[0][0] = 2 + 9 = 11`
+
+   Final `dp` table:
+
+   ```
+   dp = [
+     [11, 0, 0, 0],
+     [9, 10, 0, 0],
+     [7, 6, 10],
+     [4, 1, 8, 3]
+   ]
+   ```
+
+3. **Result:**
+   - The top cell `dp[0][0]` contains the minimum path sum from the top to the bottom of the triangle, which is `11`.
+
+### Recursion Tree for Memoization Approach
+
+While the tabulation approach avoids explicit recursion, understanding the recursion tree for a memoization approach might help. The recursion tree illustrates how each subproblem is solved and reused.
+
+For the example triangle, the recursion tree would look like this:
+
+```
+f(triangle, dp, 0, 0)
+   /        \
+  /          \
+f(triangle, dp, 1, 0)  f(triangle, dp, 1, 1)
+ /        \           /          \
+f(triangle, dp, 2, 0) f(triangle, dp, 2, 1) f(triangle, dp, 2, 1) f(triangle, dp, 2, 2)
+ /        \           /        \           /        \           /         \
+4          1          1         8          1         8           8         3
+```
+
+- `f(triangle, dp, 2, 0)` calls `f(triangle, dp, 3, 0)` and `f(triangle, dp, 3, 1)`.
+- `f(triangle, dp, 2, 1)` calls `f(triangle, dp, 3, 1)` and `f(triangle, dp, 3, 2)`.
+- Each leaf node in the recursion tree corresponds to the values in the last row of the triangle.
+
+In the tabulation approach, you avoid this recursive overhead by computing the solution iteratively from the bottom up, which is generally more efficient in terms of both time and space.
+
