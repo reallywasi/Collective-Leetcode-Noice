@@ -1,0 +1,44 @@
+#include <vector>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+class Solution {
+public:
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        
+        // Create a DP table initialized with the values of the first row
+        vector<vector<int>> dp(matrix);
+        
+        // Fill the DP table
+        for (int i = 1; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                // Directly above
+                int minPathSum = dp[i-1][j];
+                
+                // Diagonal left
+                if (j > 0) {
+                    minPathSum = min(minPathSum, dp[i-1][j-1]);
+                }
+                
+                // Diagonal right
+                if (j < n - 1) {
+                    minPathSum = min(minPathSum, dp[i-1][j+1]);
+                }
+                
+                // Update the DP table
+                dp[i][j] += minPathSum;
+            }
+        }
+        
+        // Find the minimum value in the last row
+        int result = INT_MAX;
+        for (int j = 0; j < n; ++j) {
+            result = min(result, dp[n-1][j]);
+        }
+        
+        return result;
+    }
+};
