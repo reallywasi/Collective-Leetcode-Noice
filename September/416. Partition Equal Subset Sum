@@ -1,0 +1,25 @@
+class Solution {
+public:
+    bool solve(const vector<int>& nums, vector<vector<int>>& dp, int i, int sum) {
+        if (sum == 0) return true;
+    if(i==0) return nums[i]==sum;
+        if (dp[i][sum] != -1) return dp[i][sum]; // Check if result is already computed
+        bool notTaken = solve(nums, dp, i - 1, sum);
+        bool taken = false;
+        if (nums[i] <= sum) {
+            taken = solve(nums, dp, i - 1, sum - nums[i]);
+        }
+        return dp[i][sum] = taken || notTaken;
+    }
+    bool canPartition(vector<int>& nums) {
+        int n = nums.size();
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        if (sum % 2 != 0) return false; // Sum must be even to partition into equal subsets
+        sum /= 2; // We only need to check if we can sum up to half of the total sum
+        vector<vector<int>> dp(n, vector<int>(sum + 1, -1)); // Initialize DP table
+        return solve(nums, dp, n - 1, sum);
+    }
+};
