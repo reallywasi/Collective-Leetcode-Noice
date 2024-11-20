@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int solve(vector<int>& coins, int i, int t, vector<vector<int>>& dp) {
+        if (i == 0) {
+            if (t % coins[i] == 0) return t / coins[i];
+            else return 1e9; // Large value to represent "not possible"
+        }
+        if (dp[i][t] != -1) return dp[i][t]; // Memoization
+        int nottake = solve(coins, i - 1, t, dp); // Skip the current coin
+        int take = 1e9; // Initialize as "not possible"
+        if (coins[i] <= t) take = 1 + solve(coins, i, t - coins[i], dp); // Take the coin
+        return dp[i][t] = min(take, nottake);
+    }
+    int coinChange(vector<int>& coins, int amount) {
+        int n = coins.size();
+        vector<vector<int>> dp(n, vector<int>(amount + 1, -1)); // Memoization table
+        int result = solve(coins, n - 1, amount, dp);
+        return (result >= 1e9) ? -1 : result; // If no solution, return -1
+    }
+};
