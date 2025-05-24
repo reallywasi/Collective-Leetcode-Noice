@@ -1,0 +1,119 @@
+// class Solution {
+// public:
+
+
+// int digsum(int n)
+// {
+//     int s=0;
+//     while(n){  s=s+n%10;    n=n/10;  }  return s;
+// }
+
+
+
+//     int minSwaps(vector<int>& nums) {
+//         int n=nums.size();
+//         vector<pair<int,int>>dsum(n);
+
+//         for(int i=0;i<n;i++)
+//         {
+//             dsum[i]={digsum(nums[i]),i};
+//         }
+// sort(dsum.begin(),dsum.end());
+
+// vector<int>targetindex(n);
+
+// for(int i=0;i<n;i++)
+// {
+// targetindex[i]=dsum[i].second;
+// }
+
+
+// // to detect swaps and cycles;
+// vector<bool>visited(n,false);
+// int swaps=0;
+// for(int i=0;i<n;i++)
+// {
+//         if(visited[i] || targetindex[i]==i) continue;
+
+//         int cyclesize=0;
+//         int j=i;
+
+//         while(!visited[j])
+//         {
+//             visited[j]=true;
+//             j=targetindex[j];
+//             cyclesize++;
+
+//         }
+
+//         if(cyclesize>0) swaps+=cyclesize-1;
+
+// }
+
+// return swaps;
+
+//     }
+// };
+
+
+
+
+
+
+
+
+
+class Solution {
+public:
+    // Helper to calculate digit sum
+    int digsum(int n) {
+        int s = 0;
+        while (n) {
+            s += n % 10;
+            n /= 10;
+        }
+        return s;
+    }
+
+
+
+    int minSwaps(vector<int>& nums) {
+        int n = nums.size();
+
+        // Step 1: Create a vector of ((digit_sum, value), index)
+        vector<pair<pair<int, int>, int>> valWithIndex(n);
+        for (int i = 0; i < n; i++) {
+            valWithIndex[i] = {{digsum(nums[i]), nums[i]}, i};
+        }
+
+        // Step 2: Sort by digit_sum and value
+        sort(valWithIndex.begin(), valWithIndex.end());
+
+        // Step 3: Build target index map
+        vector<int> targetIndex(n);
+        for (int i = 0; i < n; i++) {
+            targetIndex[i] = valWithIndex[i].second;
+        }
+
+        // Step 4: Count cycles
+        vector<bool> visited(n, false);
+        int swaps = 0;
+        for (int i = 0; i < n; i++) {
+            if (visited[i] || targetIndex[i] == i) continue;
+
+            int cycleSize = 0;
+            int j = i;
+
+            while (!visited[j]) {
+                visited[j] = true;
+                j = targetIndex[j];
+                cycleSize++;
+            }
+
+            if (cycleSize > 0)
+                swaps += (cycleSize - 1);
+        }
+
+        return swaps;
+    }
+};
