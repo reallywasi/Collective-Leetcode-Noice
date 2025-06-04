@@ -1,0 +1,55 @@
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        // Step 1: Store the index of each value in inorder traversal
+        map<int, int> inorderIndexMap;
+        for (int i = 0; i < inorder.size(); i++) {
+            inorderIndexMap[inorder[i]] = i;
+        }
+        // Step 2: Call helper to build tree
+        return build(preorder, 0, preorder.size() - 1,
+                     inorder, 0, inorder.size() - 1,
+                     inorderIndexMap);
+    }
+    TreeNode* build(vector<int>& preorder, int preorderStart, int preorderEnd,
+                    vector<int>& inorder, int inorderStart, int inorderEnd,
+                    map<int, int>& inorderIndexMap) {
+        
+        // Step 3: Base case
+        if (preorderStart > preorderEnd || inorderStart > inorderEnd)
+            return nullptr;
+
+        // Step 4: Identify the root value from preorder
+        int rootVal = preorder[preorderStart];
+        TreeNode* root = new TreeNode(rootVal);
+
+        // Step 5: Find index of root in inorder
+        int inorderRootIndex = inorderIndexMap[rootVal];
+
+        // Step 6: Number of nodes in left subtree
+        int leftSubtreeSize = inorderRootIndex - inorderStart;
+
+        // Step 7: Define the boundaries for left subtree
+        int leftPreorderStart = preorderStart + 1;
+        int leftPreorderEnd = preorderStart + leftSubtreeSize;
+        int leftInorderStart = inorderStart;
+        int leftInorderEnd = inorderRootIndex - 1;
+
+        // Step 8: Define the boundaries for right subtree
+        int rightPreorderStart = preorderStart + leftSubtreeSize + 1;
+        int rightPreorderEnd = preorderEnd;
+        int rightInorderStart = inorderRootIndex + 1;
+        int rightInorderEnd = inorderEnd;
+
+        // Step 9: Recursively build left and right subtrees
+        root->left = build(preorder, leftPreorderStart, leftPreorderEnd,
+                           inorder, leftInorderStart, leftInorderEnd,
+                           inorderIndexMap);
+
+        root->right = build(preorder, rightPreorderStart, rightPreorderEnd,
+                            inorder, rightInorderStart, rightInorderEnd,
+                            inorderIndexMap);
+
+        return root;
+    }
+};
