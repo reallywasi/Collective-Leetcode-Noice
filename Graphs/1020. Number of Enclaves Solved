@@ -1,0 +1,59 @@
+class Solution {
+public:
+    int numEnclaves(vector<vector<int>>& grid) {
+        int dr[] = {0, 0, 1, -1};
+        int dc[] = {-1, 1, 0, 0};
+
+        int n = grid.size();  int m = grid[0].size();
+
+        vector<vector<int>> visited(n, vector<int>(m, 0));
+        queue<pair<int, int>> q;
+        // count of ones in bfs who are linked to boundary
+        int cnt = 0;   int totalones = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 1)
+                    totalones++;
+            }
+        }
+        for (int row = 0; row < n; row++) {
+            if (grid[row][0] == 1 && visited[row][0] == 0) {
+                q.push({row, 0});
+                visited[row][0] = 1;
+                cnt++;
+            }
+            if (grid[row][m - 1] == 1 && visited[row][m - 1] == 0) {
+                q.push({row, m - 1});
+                visited[row][m - 1] = 1;
+                cnt++;
+            }
+        }
+        for (int col = 0; col < m; col++) {
+            if (grid[0][col] == 1 && visited[0][col] == 0) {
+                q.push({0, col});
+                visited[0][col] = 1;
+                cnt++;
+            }
+
+            if (grid[n - 1][col] == 1 && visited[n - 1][col] == 0) {
+                q.push({n - 1, col});
+                visited[n - 1][col] = 1;
+                cnt++;
+            }
+        }
+        while (!q.empty()) {
+            int row = q.front().first;
+            int col = q.front().second;
+            q.pop();
+            for (int i = 0; i < 4; i++) {
+                int nr = row + dr[i]; int nc = col + dc[i];
+                if (nr >= 0 && nr < n && nc >= 0 && nc < m &&
+                    visited[nr][nc] == 0 && grid[nr][nc] == 1) {
+                    visited[nr][nc] = 1;
+                    cnt++;
+                    q.push({nr, nc});
+                }
+            }
+        }   return totalones - cnt;
+    }
+};
