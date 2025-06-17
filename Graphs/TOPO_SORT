@@ -1,0 +1,41 @@
+class Solution {
+  public:
+  stack<int>st;
+  
+  
+    void dfs(int node,vector<vector<int>>& adj, vector<int>&visited)
+    {
+        visited[node]=1;
+        
+        for(int it : adj[node])
+        {
+            if(visited[it]==0) dfs(it,adj,visited);
+        }
+        st.push(node);
+    }
+  
+    vector<int> topoSort(int V, vector<vector<int>>& edges) {
+        // code here
+        vector<int>visited(V,0);
+        
+                vector<vector<int>> adj(V);
+        for (auto& edge : edges) {
+            adj[edge[0]].push_back(edge[1]);
+        }
+        
+        
+        for(int node=0;node<V;node++)
+        {
+            if(visited[node]==0) dfs(node,adj,visited);
+        }
+        
+        vector<int>ans;
+        
+      while(!st.empty())
+        {
+            ans.push_back(st.top());
+            st.pop();
+        }
+        return ans;
+    }
+};
