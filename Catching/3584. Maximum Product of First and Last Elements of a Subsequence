@@ -1,0 +1,30 @@
+#include <climits>
+
+class Solution {
+public:
+    long long maximumProduct(vector<int>& nums, int m) {
+        int n = nums.size();
+        vector<int> leftlesser(n), leftgreater(n), rightlesser(n),
+            rightgreater(n);
+        rightlesser[n - 1] = nums[n - 1];
+        rightgreater[n - 1] = nums[n - 1];
+
+        for (int i = n - 2; i >= 0; i--) {
+            rightlesser[i] = min(rightlesser[i + 1], nums[i]);
+            rightgreater[i] = max(rightgreater[i + 1], nums[i]);
+        }
+        leftlesser[0] = nums[0];
+        leftgreater[0] = nums[0];
+        for (int i = 1; i < n; i++) {
+            leftlesser[i] = min(leftlesser[i - 1], nums[i]);
+            leftgreater[i] = max(leftgreater[i - 1], nums[i]);
+        }
+        long long maxi = LLONG_MIN;
+        for (int i = 0; i <= n - m; i++) {
+            long long prod1 = 1LL * leftlesser[i] * rightlesser[i + m - 1];
+            long long prod2 = 1LL * leftgreater[i] * rightgreater[i + m - 1];
+            maxi = max(maxi, max(prod1, prod2));
+        }
+        return maxi;
+    }
+};
