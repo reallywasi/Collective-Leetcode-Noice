@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int countLatticePoints(vector<vector<int>>& circles) {
+        set<pair<int, int>> pts;
+
+        for (auto it : circles) {
+            int x = it[0], y = it[1], r = it[2];
+
+            for (int dx = -r; dx <= r; ++dx) {
+                for (int dy = -r; dy <= r; ++dy) {
+                    int newx = x + dx;
+                    int newy = y + dy;
+
+                    if (dx * dx + dy * dy <= r * r) {
+                        pts.insert({newx, newy});
+                    }
+                }
+            }
+        }
+
+        return pts.size();
+    }
+};
