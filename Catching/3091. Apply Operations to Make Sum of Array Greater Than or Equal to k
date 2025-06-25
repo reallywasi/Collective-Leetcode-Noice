@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int minOperations(int k) {
+        int mini = INT_MAX;
+
+        for (int i = 0; i <= k; i++) {
+            int increaseoperation = i;
+            int increasesum = 1 + i;
+
+            // To make total sum >= k using duplications
+            int divideoperation = (k + increasesum - 1) / increasesum - 1;
+
+            mini = min(mini, increaseoperation + divideoperation);
+        }
+
+        return mini;
+    }
+};
