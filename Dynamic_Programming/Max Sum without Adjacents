@@ -1,0 +1,31 @@
+// User function template for C++
+class Solution {
+  public:
+    // calculate the maximum sum with out adjacent
+    
+    int solve(vector<int>&dp, vector<int>&arr,int idx){
+        
+        if(idx<0) return 0;
+        
+        if(idx==0) return arr[0];
+        
+        if(dp[idx]!=-1)  return dp[idx];
+        
+        int pick=arr[idx]+solve(dp,arr,idx-2);
+        int notpick=solve(dp,arr,idx-1);
+        
+        return dp[idx]=max(pick,notpick);
+        
+    }
+    
+    
+    int findMaxSum(vector<int>& arr) {
+        // code here
+        
+        int n=arr.size();
+        vector<int>dp(n,-1);
+        
+        return solve(dp,arr,n-1);
+        
+    }
+};
